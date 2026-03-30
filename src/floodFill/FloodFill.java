@@ -3,13 +3,14 @@ package floodFill;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
+import image.GerenciadorImagem;
 import model.Pixel;
 import structures.FilaEncadeada;
 import structures.PilhaEncadeada;
 
 public class FloodFill {
 
-    public void floodFillWithQueue(BufferedImage image, int startX, int startY) {
+    public void floodFillWithQueue(BufferedImage image, int startX, int startY, GerenciadorImagem gerenciadorImagem) {
         if (image == null) {
             return;
         }
