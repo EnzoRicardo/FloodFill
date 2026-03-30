@@ -20,11 +20,14 @@ public class FloodFill {
         }
 
         int originalColor = image.getRGB(startX, startY);
-        int fillColor = new Color(167, 45, 161).getRGB();
+        int fillColor = new Color(79, 111, 255).getRGB();
 
         if (originalColor == fillColor) {
             return;
         }
+
+        int frameCounter = 0;
+        int pixelCounter = 0;
 
         FilaEncadeada pixelQueue = new FilaEncadeada();
         pixelQueue.enqueue(new Pixel(startX, startY));
@@ -49,14 +52,32 @@ public class FloodFill {
 
             image.setRGB(x, y, fillColor);
 
+            pixelCounter++;
+
+            if (pixelCounter % 1000 == 0) {
+                try {
+                    gerenciadorImagem.salvarFrame(image, "frames_queue", frameCounter);
+                    frameCounter++;
+                } catch (Exception e) {
+                    System.out.println("Erro ao salvar frame: " + e.getMessage());
+                }
+            }
+
             pixelQueue.enqueue(new Pixel(x + 1, y));
             pixelQueue.enqueue(new Pixel(x - 1, y));
             pixelQueue.enqueue(new Pixel(x, y + 1));
             pixelQueue.enqueue(new Pixel(x, y - 1));
         }
+
+        // salva último frame
+        try {
+            gerenciadorImagem.salvarFrame(image, "frames_queue", frameCounter);
+        } catch (Exception e) {
+            System.out.println("Erro ao salvar frame final: " + e.getMessage());
+        }
     }
 
-    public void floodFillWithStack(BufferedImage image, int startX, int startY) {
+    public void floodFillWithStack(BufferedImage image, int startX, int startY, GerenciadorImagem gerenciadorImagem) {
         if (image == null) {
             return;
         }
@@ -66,11 +87,14 @@ public class FloodFill {
         }
 
         int originalColor = image.getRGB(startX, startY);
-        int fillColor = new Color(0,143,57).getRGB();
+        int fillColor = new Color(0, 143, 57).getRGB();
 
         if (originalColor == fillColor) {
             return;
         }
+
+        int frameCounter = 0;
+        int pixelCounter = 0;
 
         PilhaEncadeada stack = new PilhaEncadeada();
         stack.push(new Pixel(startX, startY));
@@ -95,10 +119,28 @@ public class FloodFill {
 
             image.setRGB(x, y, fillColor);
 
+            pixelCounter++;
+
+            if (pixelCounter % 1000 == 0) {
+                try {
+                    gerenciadorImagem.salvarFrame(image, "frames_stack", frameCounter);
+                    frameCounter++;
+                } catch (Exception e) {
+                    System.out.println("Erro ao salvar frame: " + e.getMessage());
+                }
+            }
+
             stack.push(new Pixel(x + 1, y));
             stack.push(new Pixel(x - 1, y));
             stack.push(new Pixel(x, y + 1));
             stack.push(new Pixel(x, y - 1));
+        }
+
+        // salva último frame
+        try {
+            gerenciadorImagem.salvarFrame(image, "frames_stack", frameCounter);
+        } catch (Exception e) {
+            System.out.println("Erro ao salvar frame final: " + e.getMessage());
         }
     }
 
